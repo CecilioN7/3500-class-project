@@ -9,6 +9,7 @@
 # description: Implementation Basic Data Analysis Routines
 
 import time
+import pandas as pd
 
 program_start_time = time.time()
 
@@ -16,32 +17,62 @@ def option1():
     print()
     print("Loading and cleaning input data set:")
     print("************************************")
-    start_time = time.time()  # Record start time
     print(f"[{time.strftime('%H:%M:%S')}] Starting Script")
     print(f"[{time.strftime('%H:%M:%S')}] Loading US_Accidents_data.csv")
 
-    # Load CSV file into a DataFrame
+    start_time = time.time()  # Record start time
+    
     try:
+        # Load CSV file into a DataFrame
         df = pd.read_csv('US_Accidents_data.csv')
-        total_columns = len(df.columns)
-        total_rows = len(df)
+        
+        # Get total columns and rows
+        total_columns = df.shape[1]
+        total_rows = df.shape[0]
+
         print(f"[{time.strftime('%H:%M:%S')}] Total Columns Read: {total_columns}")
         print(f"[{time.strftime('%H:%M:%S')}] Total Rows Read: {total_rows}")
+
     except FileNotFoundError:
         print("Error: File not found.")
 
     end_time = time.time()  # Record end time
     time_to_load = end_time - start_time  # Calculate time taken
     print(f"\nTime to load is:  {time_to_load:.2f} seconds")
-
+    
 def option2():
     print()
     print("Processing input data set:")
     print("**************************")
     print(f"[{time.strftime('%H:%M:%S')}] Performing Data Clean Up")
-    print(f"[{time.strftime('%H:%M:%S')}] Total Rows Read after cleaning is: <Your Answer>")
 
     start_time = time.time()
+    
+    try:
+        # Load CSV file into a DataFrame
+        df = pd.read_csv('US_Accidents_data.csv')
+        
+        # Drop rows with missing values in specified columns
+        df.dropna(subset=['ID', 'Severity', 'Zipcode', 'Start_Time', 'End_Time', 'Visibility(mi)', 'Weather_Condition', 'Country'], inplace=True)
+        
+        # Drop rows with empty values in 3 or more columns
+        df.dropna(thresh=5, inplace=True)
+        
+        # Consider only the first 5 digits of the zip code
+        df['Zipcode'] = df['Zipcode'].astype(str).str[:5]
+        
+        # Drop rows with distance equal to zero
+        df = df[df['Distance(mi)'] != 0]
+        
+        # Drop rows where the duration of the accident is zero
+        df = df[df['End_Time'] != df['Start_Time']]
+        
+        total_rows_after_cleaning = len(df)
+        print(f"[{time.strftime('%H:%M:%S')}] Total Rows Read after cleaning is: {total_rows_after_cleaning}")
+        
+    except FileNotFoundError:
+        print("Error: File not found.")
+
     end_time = time.time()
     time_to_process = end_time - start_time
     print(f"\nTime to process is:  {time_to_process:.2f} seconds")
