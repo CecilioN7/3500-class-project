@@ -13,6 +13,36 @@ import pandas as pd
 
 program_start_time = time.time()
 
+# question 3 method
+def get_state_with_most_severity_2_accidents():
+    try:
+        # Load CSV file into a DataFrame
+        df = pd.read_csv('US_Accidents_data.csv')
+
+        # Filter the DataFrame to include only severity 2 accidents
+        severity_2_accidents = df[df['Severity'] == 2]
+
+        # Group by state and count the number of severity 2 accidents in each state
+        state_accident_counts = severity_2_accidents['State'].value_counts()
+
+        # Get the state with the maximum number of severity 2 accidents
+        state_with_most_accidents = state_accident_counts.idxmax()
+
+        return state_with_most_accidents
+
+    except FileNotFoundError:
+        print("Error: File not found.")
+
+# question 4 method
+def get_most_common_severity_for_states(states):
+    try:
+        df = pd.read_csv('US_Accidents_data.csv')
+        states_data = df[df['State'].isin(states)]
+        most_common_severity = states_data.groupby('State')['Severity'].agg(pd.Series.mode)
+        return most_common_severity
+    except FileNotFoundError:
+        print("Error: File not found.")
+
 def option1():
     print()
     print("Loading and cleaning input data set:")
@@ -81,11 +111,32 @@ def option3():
     print()
     print("Answering questions:")
     print("********************")
-    print(f"[{time.strftime('%H:%M:%S')}] In what month were there more accidents reported?")
-    print(f"[{time.strftime('%H:%M:%S')}] <Your Answer>")
-    print(".\n.\n.")
-    print(f"[{time.strftime('%H:%M:%S')}] What was the longest accident (in hours) recorded in Florida in the Spring (March, April, and May) of 2020?")
-    print(f"[{time.strftime('%H:%M:%S')}] <Your Answer>")
+    print(f"[{time.strftime('%H:%M:%S')}] 3) What is the state that had the most accidents of severity 2?")
+    
+    start_time = time.time()
+    
+    state_with_most_accidents = get_state_with_most_severity_2_accidents()
+    if state_with_most_accidents:
+        print(f"[{time.strftime('%H:%M:%S')}] {state_with_most_accidents}")
+
+    end_time = time.time()
+    time_to_answer = end_time - start_time
+    print(f"\nTime to answer is:  {time_to_answer:.2f} seconds")
+
+    print()
+    print(f"[{time.strftime('%H:%M:%S')}] 4) What severity is the most common in Virginia, California, and Florida?")
+    
+    start_time = time.time()
+    
+    states = ['VA', 'CA', 'FL']
+    most_common_severity = get_most_common_severity_for_states(states)
+    if most_common_severity is not None:
+        for state, severity in most_common_severity.items():
+            print(f"[{time.strftime('%H:%M:%S')}] {state}: {severity}")
+
+    end_time = time.time()
+    time_to_answer = end_time - start_time
+    print(f"\nTime to answer is:  {time_to_answer:.2f} seconds")
 
 def option4():
     print()
