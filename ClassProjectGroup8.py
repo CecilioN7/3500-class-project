@@ -16,16 +16,22 @@ def option1():
     print()
     print("Loading and cleaning input data set:")
     print("************************************")
+    start_time = time.time()  # Record start time
     print(f"[{time.strftime('%H:%M:%S')}] Starting Script")
     print(f"[{time.strftime('%H:%M:%S')}] Loading US_Accidents_data.csv")
-    total_columns = "<Your Answer>"
-    total_rows = "<Your Answer>"
-    print(f"[{time.strftime('%H:%M:%S')}] Total Columns Read: {total_columns}")
-    print(f"[{time.strftime('%H:%M:%S')}] Total Rows Read: {total_rows}")
 
-    start_time = time.time()
-    end_time = time.time()
-    time_to_load = end_time - start_time
+    # Load CSV file into a DataFrame
+    try:
+        df = pd.read_csv('US_Accidents_data.csv')
+        total_columns = len(df.columns)
+        total_rows = len(df)
+        print(f"[{time.strftime('%H:%M:%S')}] Total Columns Read: {total_columns}")
+        print(f"[{time.strftime('%H:%M:%S')}] Total Rows Read: {total_rows}")
+    except FileNotFoundError:
+        print("Error: File not found.")
+
+    end_time = time.time()  # Record end time
+    time_to_load = end_time - start_time  # Calculate time taken
     print(f"\nTime to load is:  {time_to_load:.2f} seconds")
 
 def option2():
