@@ -5,7 +5,7 @@
 # Student 1: Cecilio Navarro
 # Student 2: Oscar Rocha
 # Student 3: Isaac Mendez
-# Student 4: 
+# Student 4: Francisco Serrato
 # description: Implementation Basic Data Analysis Routines
 
 import time
