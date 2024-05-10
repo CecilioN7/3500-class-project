@@ -43,6 +43,77 @@ def get_most_common_severity_for_states(states):
     except FileNotFoundError:
         print("Error: File not found.")
 
+# question 8 method
+def NH_data(data):
+    try:
+        #only loads data from New Hampshire
+        NH_data = data[data['State'] == 'NH']
+    
+        #collects data from New Hampshire accidents with a severity of 2
+        NH_severity2 = NH_data[NH_data['Severity'] == 2]
+    
+        #print info
+        print("8. What was the maximum visibility of all accidents of severity 2 that occurred in the state of New Hampshire?\n")
+        print("Max visibility of accidents in New Hampshire with a severity of 2: ")
+        print(NH_severity2[Visibility(mi).max())
+        print("\n")
+    
+    except FileNotFoundError:
+        print("Error: File not found.")
+
+# question 9 method
+def accident_severity_annually(data):
+    try:
+        #start time
+        start_time = time.time()
+    
+        #collect only bakersfield data
+        bakersfield_accidents = data[data['City'] == 'Bakersfield'].copy()
+    
+        #years
+        severity_by_year = bakersfield_accidents.groupby(['Severity', 'Year']).size().unstack(fill_value = 0)
+    
+        #end time
+        end_time = time.time()
+    
+        #total time
+        total_time = end_time - start_time
+    
+        #display info
+        print("9. How many accidents of each severity were recorded in Bakersfield? Display the data per year.\n")
+    
+        print(severity_by_year)
+        print("\nTime to execute: ", total_time, "seconds\n")
+
+    except FileNotFoundError:
+        print("Error: File not found.")
+
+# question 10 method    
+def longest_accident_time(data):
+    try:
+        #start time
+        start_time = time.time()
+    
+        #collect only las vegas data between march, april, and may
+        LV_data = data[data['City'] == 'Las Vegas']
+        spring_szn = LV_data[LV_data['Start_Time'].dt.month.isin([3, 4, 5])]
+    
+        #how long the accident lasted
+        spring_szn ['Accident_Time'] = spring_szn['End_Time'] - spring_szn['Start_Time'].dt.total_seconds() / 3600
+    
+        #by year
+        by_year = spring_szn.groupby(spring_szn['Start_Time'].dt.year)
+        longest_accident_yearly = by_year['Accident_Time'].max()
+    
+        print("10. What was the longest accident (in hours) recorded in Las Vegas in the Spring (March, April, and May)? Display the data per year.\n")
+        print("Longest accident per year: ")
+        for year, duration in longest_accident_yearly.items():
+            print(f"Year {year}: {duration:.2f} hours")
+        print("\n")
+    
+    except FileNotFoundError:
+        print("Error: File not found.")
+        
 def option1():
     print()
     print("Loading and cleaning input data set:")
